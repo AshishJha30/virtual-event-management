@@ -7,26 +7,21 @@ const {
   deleteEvent,
   registerForEvent,
 } = require("../controllers/eventController");
-
-// Simple auth middleware for quick fix
-const simpleAuth = (req, res, next) => {
-  req.user = { id: "temp-user", role: "organizer", email: "test@example.com" };
-  next();
-};
+const { authenticate } = require("../middleware/authenticate");
 
 // GET /events - Get all events
-router.get("/events", simpleAuth, getEvents);
+router.get("/events", authenticate, getEvents);
 
 // POST /events - Create event (Organizers only)
-router.post("/events", simpleAuth, createEvent);
+router.post("/events", authenticate, createEvent);
 
 // PUT /events/:id - Update event (Organizers only)
-router.put("/events/:id", simpleAuth, updateEvent);
+router.put("/events/:id", authenticate, updateEvent);
 
 // DELETE /events/:id - Delete event (Organizers only)
-router.delete("/events/:id", simpleAuth, deleteEvent);
+router.delete("/events/:id", authenticate, deleteEvent);
 
 // POST /events/:id/register - Register for event
-router.post("/events/:id/register", simpleAuth, registerForEvent);
+router.post("/events/:id/register", authenticate, registerForEvent);
 
 module.exports = router;
